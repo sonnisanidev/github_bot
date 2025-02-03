@@ -13,7 +13,7 @@ access_token = os.environ.get("GITHUB_TOKEN")
 if not access_token:
     raise ValueError("GITHUB_TOKEN is not set in the environment variables or .env file!")
 
-headers = {"Authorization": f"token {access_token}"}
+headers = {"Authorization": f"Bearer {access_token}"}
 
 @app.route('/debug-token')
 def debug_token():
