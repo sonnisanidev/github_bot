@@ -9,7 +9,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # Get token from environment variable
-access_token = os.getenv("GITHUB_TOKEN")
+access_token = os.environ.getenv("GITHUB_TOKEN")
 if not access_token:
     raise ValueError("GITHUB_TOKEN is not set in the environment variables or .env file!")
 
