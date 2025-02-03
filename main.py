@@ -15,6 +15,11 @@ if not access_token:
 
 headers = {"Authorization": f"token {access_token}"}
 
+@app.route('/debug-token')
+def debug_token():
+    return jsonify({"token": access_token[:5] + '...'})  # Show first 5 chars for safety
+
+
 def get_all_repos():
     repos = []
     page = 1
