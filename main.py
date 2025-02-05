@@ -1,4 +1,5 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, make_response, request
+from flask_cors import CORS
 import requests
 import os
 from dotenv import load_dotenv
@@ -7,6 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)  # This enables CORS for all routes
 
 # Get token from environment variable
 access_token = os.environ.get("GITHUB_TOKEN")
@@ -45,16 +47,25 @@ def get_all_repos():
         } for repo in page_repos])
         
         page += 1
-    response.headers.add("Access-Control-Allow-Origin", "*")
     return repos
 
-@app.route('/repos', methods=['GET'])
+@app.route('/repos', methods=['GET', 'OPTIONS'])
 def repos_endpoint():
+    if request.method == 'OPTIONS':
+        response = make_response()
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Headers'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+        return response
+
     repo_data = get_all_repos()
-    return jsonify({
+    response = make_response(jsonify({
         "count": len(repo_data),
         "repositories": repo_data
-    })
+    }))
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
 
 @app.route('/')
 def home():
