@@ -13,7 +13,7 @@ access_token = os.environ.get("GITHUB_TOKEN")
 if not access_token:
     raise ValueError("GITHUB_TOKEN is not set in the environment variables or .env file!")
 
-headers = {"Authorization": f"Bearer {access_token}"}
+headers = {"Authorization": f"Token {access_token}"}
 
 @app.route('/debug-token')
 def debug_token():
@@ -45,7 +45,7 @@ def get_all_repos():
         } for repo in page_repos])
         
         page += 1
-        
+    response.headers.add("Access-Control-Allow-Origin", "*")
     return repos
 
 @app.route('/repos', methods=['GET'])
